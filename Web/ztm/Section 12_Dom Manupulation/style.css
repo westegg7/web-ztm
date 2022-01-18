@@ -1,0 +1,16 @@
+.done {
+	text-decoration: line-through;
+}
+
+button {
+	margin-left: 15px;
+	padding: 1px 1px;
+	font-size: 10px;
+}
+
+#enter {
+	background-color: skyblue;
+	border-radius: 10px;
+	font-size: 15px;
+	padding: 3px 3px;
+}
