@@ -1,49 +1,65 @@
-var css = document.querySelector('h3');
-var color1 = document.querySelector('.color1');
-var color2 = document.querySelector('.color2');
-var body = document.getElementById('gradient');
-var random = document.getElementById('random');
+var color1 = document.querySelector(".color1");
+var color2 = document.querySelector(".color2");
+var body = document.getElementById("gradient");
+let randomBtn = document.getElementById("random");
 
-/* html 태그에 직접 onclick="setGradient()" 형태로 붙일 수도 있다.*/ 
-function setGradient() {
-    body.style.background = "linear-gradient(to right, " 
-    + color1.value 
-    + ", " 
-    + color2.value 
-    + ")";
+const setGradientBackground = () => {
+    let chosenColor = `linear-gradient(to right, ${color1.value}, ${color2.value}`;
+    body.style.background = chosenColor;
 
-    css.textContent = body.style.background + ";";
+    rgbIndicator();
+    random.style.background = chosenColor;
 }
 
-function getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
+const rgbIndicator = () => {
+    let h3 = document.querySelector("h3");
+
+    h3.textContent = body.style.background + ";";
+}
+
+const getRandomIntZeroToMax = (max) => {
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min; //최댓값도 포함, 최솟값도 포함
+
+    return Math.floor(Math.random() * (max + 1));
 }
 
-function getRandomGradient() {
-    let r1 = getRandomIntInclusive(0, 255);
-    let g1 = getRandomIntInclusive(0, 255);
-    let b1 = getRandomIntInclusive(0, 255);
-    let r2 = getRandomIntInclusive(0, 255);
-    let g2 = getRandomIntInclusive(0, 255);
-    let b2 = getRandomIntInclusive(0, 255);
-    let randomGradient = "linear-gradient(to right,rgb("
-	+ r1 + ", " + g1 +", " + b1 
-	+ "), rgb("
-	+ r2 + ", " + g2 +", " + b2
-	+ "))"; 
+/* color type의 input element 는 hex값만 받는다. 
+따라서 input value 값을 바꾸려면 rgb값을 hex값으로 변환시켜야 함. */
+function ColorToHex(color) {
+    var hexadecimal = color.toString(16);
+    return hexadecimal.length == 1 ? "0" + hexadecimal : hexadecimal;
+}
+
+function ConvertRGBtoHex(red, green, blue) {
+    return "#" + ColorToHex(red) + ColorToHex(green) + ColorToHex(blue);
+}
+
+function randomColor() {
+    let r1 = getRandomIntZeroToMax(255);
+    let g1 = getRandomIntZeroToMax(255);
+    let b1 = getRandomIntZeroToMax(255);
+    let r2 = getRandomIntZeroToMax(255);
+    let g2 = getRandomIntZeroToMax(255);
+    let b2 = getRandomIntZeroToMax(255);
+
+    let randomGradient = `linear-gradient(to right, rgb(${r1}, ${g1}, ${b1}), \
+    rgb(${r2}, ${g2}, ${b2}))`;
 
     body.style.background = randomGradient;
-	random.style.background = randomGradient;
+    random.style.background = randomGradient;
 
-    css.textContent = body.style.background + ";";
+    let color1HexValue = ConvertRGBtoHex(r1, g1, b1);
+    let color2HexValue = ConvertRGBtoHex(r2, g2, b2);
+
+    color1.value = color1HexValue;
+    color2.value = color2HexValue;
+
+    rgbIndicator();
 }
 
-setGradient();
+setGradientBackground();
 
-color1.addEventListener("input", setGradient);
+color1.addEventListener("input", setGradientBackground);
+color2.addEventListener("input", setGradientBackground);
 
-color2.addEventListener("input", setGradient);
-
-random.addEventListener("click", getRandomGradient);
+random.addEventListener("click", randomColor);
